@@ -21,8 +21,9 @@ def check_admin(message):
                 break
     except AttributeError:
         # Bypass for redkrieg to work in private messages
-        if str(message.author.id) == "135195179219943424":
-            is_admin = True
+        #if str(message.author.id) == "135195179219943424":
+        #    is_admin = True
+        pass
     return is_admin
 
 @client.event
