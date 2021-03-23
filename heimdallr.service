@@ -1,0 +1,19 @@
+[Unit]
+Description=heimdallrbot
+After=syslog.target network.target
+
+[Service]
+Type=simple
+User=vhserver
+WorkingDirectory=/home/vhserver/heimdallr
+ExecStart=/home/vhserver/venv/bin/python /home/vhserver/heimdallr/heimdallr.py
+Restart=on-failure
+RestartSec=5s
+TimeoutStopSec=3
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=heimdallr
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target
