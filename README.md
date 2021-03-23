@@ -53,6 +53,8 @@ sudo systemctl start heimdallr.service
 Usage
 ====
 
+Add your players to the "Asgardians" role to grant non-admins access to the bot.
+
 - `!bifrost open` - start the server
 - `!bifrost close` - stop the server
 - `!bifrost status` - check status of the server
