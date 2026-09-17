@@ -20,7 +20,8 @@ def check_admin(message):
                 is_admin = True
                 break
     except AttributeError:
-        pass
+        if f"<@{message.author.id>}>" == admin_string:
+            is_admin = True
     return is_admin
 
 @client.event
@@ -50,7 +51,7 @@ async def on_message(message):
                     )
                 except subprocess.CalledProcessError as exc:
                     await message.channel.send(
-                        "A terrible fate has befallen the Bifröst, I cannot open it!  Please contact the admins, for only they hold the keys to Asgard and the machinations which drive the Bifröst.\n\n```\n===STDOUT===\n{}\n\n===STDERROR===\n{}\n```".format(exc.stdout, exc.stderr)
+                        "A terrible fate has befallen the Bifröst, I cannot open it!  Please contact {}, for only he holds the keys to Asgard and the machinations which drive the Bifröst.\n\n```\n===STDOUT===\n{}\n\n===STDERROR===\n{}\n```".format(admin_string, exc.stdout, exc.stderr)
                     )
             elif command == "close":
                 await message.channel.send(
@@ -66,8 +67,21 @@ async def on_message(message):
                         await message.channel.send("Wait, the Bifröst is already closed...")
                     else:
                         await message.channel.send(
-                            "Hmm, not all is well.  I'm certain the admins can divine what happened from this:\n\n```\n===RC===\n{}\n===STDOUT===\n{}\n\n===STDERROR===\n{}\n```".format(exc.returncode, exc.stdout, exc.stderr)
+                            "Hmm, not all is well.  I'm certain {} can divine what happened from this:\n\n```\n===RC===\n{}\n===STDOUT===\n{}\n\n===STDERROR===\n{}\n```".format(admin_string, exc.returncode, exc.stdout, exc.stderr)
                         )
+            elif command == "update":
+                await message.channel.send(
+                    "The Bifröst shifts...  please wait."
+                )
+                try:
+                    result = subprocess.run(["/home/vhserver/vhserver", "update"], capture_output=True)
+                    await message.channel.send(
+                        "The Bifröst is firm once more!"
+                    )
+                except subprocess.CalledProcessError as exc:
+                    await message.channel.send(
+                        "Hmm, not all is well.  I'm certain {} can divine what happened from this:\n\n```\n===RC===\n{}\n===STDOUT===\n{}\n\n===STDERROR===\n{}\n```".format(admin_string, exc.returncode, exc.stdout, exc.stderr)
+                    )
             elif command == "status":
                 result = subprocess.run(["/home/vhserver/vhserver", "monitor"], capture_output=True)
                 if result.returncode == 0:
@@ -80,7 +94,7 @@ async def on_message(message):
                     )
                 else:
                     await message.channel.send(
-                        "Something strange is afoot, the Bifröst is in an unknown state.  Perhaps the admins can make sense of this:\n\n```\n===RC===\n{}\n===STDOUT===\n{}\n\n===STDERROR===\n{}\n```".format(result.returncode, result.stdout, result.stderr)
+                        "Something strange is afoot, the Bifröst is in an unknown state.  Perhaps {} can make sense of this:\n\n```\n===RC===\n{}\n===STDOUT===\n{}\n\n===STDERROR===\n{}\n```".format(admin_string, result.returncode, result.stdout, result.stderr)
                     )
             else:
                 await message.channel.send(
@@ -98,7 +112,9 @@ async def on_ready():
 
 # Configuration
 with open('token.json') as f:
-    token = json.load(f)['token']
+    token_data = json.load(f)
+    token = token_data['token']
+    admin_string = token_data['admin']
     
 # Run it
 client.run(token)

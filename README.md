@@ -29,6 +29,8 @@ cp token.json.example token.json
 nano -w token.json #put your bot's token here
 ```
 
+If you want to tag a specific user as admin, change "the admins" to "<@youruserid>".  You can get your Discord user ID by clicking your name in the bottom left and selecting "Copy User ID".  The "<@12345>" part is important, it only copies your numerical ID.
+
 Try running your bot from the command line to ensure it works:
 
 ```
@@ -58,3 +60,4 @@ Add your players to the "Asgardians" role to grant non-admins access to the bot.
 - `!bifrost open` - start the server
 - `!bifrost close` - stop the server
 - `!bifrost status` - check status of the server
+- `!bifrost update` - trigger an update for the server
