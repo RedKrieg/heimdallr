@@ -20,7 +20,7 @@ def check_admin(message):
                 is_admin = True
                 break
     except AttributeError:
-        if f"<@{message.author.id>}>" == admin_string:
+        if f"<@{message.author.id}>" == admin_string:
             is_admin = True
     return is_admin
 
